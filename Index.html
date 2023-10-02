@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Feedback Form</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Set the background image */
+    body {
+      background-image: url('https://images.pexels.com/photos/531880/pexels-photo-531880.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    /* Center the entire content vertically and horizontally */
+    .container {
+      background-color: rgba(246, 246, 246, 0.8);
+      /* Add a semi-transparent white background for better readability */
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+      font-size: 32px;
+    }
+
+    /* Add styles for emoji reactions */
+    .emoji-reactions {
+      font-size: 24px;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .emoji-reactions span {
+      cursor: pointer;
+      margin-right: 20px;
+      border: 2px solid transparent;
+      /* Add transparent border for spacing */
+      padding: 10px;
+      border-radius: 50%;
+    }
+
+    .emoji-reactions span.selected {
+      border-color: #000;
+      /* Change border color on selection */
+    }
+
+    /* Center the form */
+    #feedback-form {
+      text-align: center;
+    }
+
+    /* Center the submit button at the bottom */
+    button[type="submit"] {
+      margin-top: 20px;
+      background-color: #030303;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Feedback Form</h1>
+
+    <form id="feedback-form">
+      <input type="text" name="name" placeholder="Your Name" required>
+      <input type="email" name="email" placeholder="Your Email" required>
+      <textarea name="feedback" id="feedback" placeholder="Your Feedback" required></textarea>
+      <div class="emoji-reactions">
+        <span onclick="insertEmoji('😠')">😠</span>
+        <span onclick="insertEmoji('😞')">😞</span>
+        <span onclick="insertEmoji('😐')">😐</span>
+        <span onclick="insertEmoji('😊')">😊</span>
+        <span onclick="insertEmoji('😄')">😄</span>
+      </div><br><br>
+      <!-- Submit button placed inside the form -->
+      <button type="button" onclick="saveFeedback()">Submit</button>
+    </form>
+  </div>
+
+  <script>
+    let selectedReaction = '';
+
+    // Function to insert the selected emoji into the feedback textarea
+    function insertEmoji(emoji) {
+      const feedbackTextarea = document.getElementById("feedback");
+      const currentText = feedbackTextarea.value;
+      feedbackTextarea.value = currentText + emoji;
+    }
+
+    // Function to save form data to a text file
+    function saveFeedback() {
+      const formData = {
+        Name: document.querySelector('input[name="name"]').value,
+
+        Email: document.querySelector('input[name="email"]').value,
+
+        Feedback: document.getElementById("feedback").value,
+      };
+
+      // Serialize the form data as a JSON string
+      const formDataJSON = JSON.stringify(formData);
+
+      // Create a Blob (binary large object) containing the JSON data
+      const blob = new Blob([formDataJSON], { type: "application/json" });
+
+      // Generate a temporary URL for the Blob
+      const url = URL.createObjectURL(blob);
+
+      // Create a download link
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "feedback.txt";
+
+      // Trigger a click event on the download link to initiate the download
+      a.click();
+
+      // Clean up the URL object to release resources
+      window.location.href = 'thank-you.html';
+      URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+
+</html>
